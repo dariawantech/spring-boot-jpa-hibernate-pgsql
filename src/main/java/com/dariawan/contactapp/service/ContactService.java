@@ -1,5 +1,6 @@
 package com.dariawan.contactapp.service;
 
+import com.dariawan.contactapp.domain.Address;
 import com.dariawan.contactapp.domain.Contact;
 import com.dariawan.contactapp.exception.BadResourceException;
 import com.dariawan.contactapp.exception.ResourceAlreadyExistsException;
@@ -78,14 +79,13 @@ public class ContactService {
         }
     }
     
-    public void updateAddress(Long id, 
-            String address1, String address2, String address3, String postalCode) 
+    public void updateAddress(Long id, Address address) 
             throws ResourceNotFoundException {
         Contact contact = findById(id);
-        contact.setAddress1(address1);
-        contact.setAddress2(address2);
-        contact.setAddress3(address3);
-        contact.setPostalCode(postalCode);
+        contact.setAddress1(address.getAddress1());
+        contact.setAddress2(address.getAddress2());
+        contact.setAddress3(address.getAddress3());
+        contact.setPostalCode(address.getPostalCode());
         contactRepository.save(contact);        
     }
     

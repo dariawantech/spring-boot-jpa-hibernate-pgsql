@@ -1,5 +1,6 @@
 package com.dariawan.contactapp.controller;
 
+import com.dariawan.contactapp.domain.Address;
 import com.dariawan.contactapp.domain.Contact;
 import com.dariawan.contactapp.exception.BadResourceException;
 import com.dariawan.contactapp.exception.ResourceAlreadyExistsException;
@@ -8,6 +9,7 @@ import com.dariawan.contactapp.service.ContactService;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api")
 public class ContactController {
     
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -35,7 +39,7 @@ public class ContactController {
     @Autowired
     private ContactService contactService;
     
-    @GetMapping(value = "/api/contacts", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/contacts")
     public ResponseEntity<List<Contact>> findAll(
             @RequestParam(value="page", defaultValue="1") int pageNumber,
             @RequestParam(required=false) String name) {
@@ -47,7 +51,7 @@ public class ContactController {
         }
     }
 
-    @GetMapping("/api/contacts/{contactId}")
+    @GetMapping(value = "/contacts/{contactId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Contact> findContactById(@PathVariable long contactId) {
         try {
             Contact book = contactService.findById(contactId);
@@ -57,8 +61,8 @@ public class ContactController {
         }
     }
     
-    @PostMapping(value = "/api/contacts")
-    public ResponseEntity<Contact> addContact(@RequestBody Contact contact) 
+    @PostMapping(value = "/contacts")
+    public ResponseEntity<Contact> addContact(@Valid @RequestBody Contact contact) 
             throws URISyntaxException {
         try {
             Contact newContact = contactService.save(contact);
@@ -75,8 +79,8 @@ public class ContactController {
         }
     }
     
-    @PutMapping(value = "/api/contacts/{contactId}")
-    public ResponseEntity<Contact> updateContact(@RequestBody Contact contact, 
+    @PutMapping(value = "/contacts/{contactId}")
+    public ResponseEntity<Contact> updateContact(@Valid @RequestBody Contact contact, 
             @PathVariable long contactId) {
         try {
             contact.setId(contactId);
@@ -93,15 +97,11 @@ public class ContactController {
         }
     }
     
-    @PatchMapping("/api/contacts/{contactId}")
-    public ResponseEntity<Void> updateAddress(@PathVariable long bookId, 
-            @RequestParam(required=false) String address1,
-            @RequestParam(required=false) String address2,
-            @RequestParam(required=false) String address3,
-            @RequestParam(required=false) String postalCode) {
+    @PatchMapping("/contacts/{contactId}")
+    public ResponseEntity<Void> updateAddress(@PathVariable long contactId,
+            @RequestBody Address address) {
         try {
-            contactService.updateAddress(bookId, 
-                    address1, address2, address3, postalCode);
+            contactService.updateAddress(contactId, address);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException ex) {
             // log exception first, then return Not Found (404)
@@ -110,7 +110,7 @@ public class ContactController {
         }
     }
     
-    @DeleteMapping(path="/api/contacts/{contactId}")
+    @DeleteMapping(path="/contacts/{contactId}")
     public ResponseEntity<Void> deleteContactById(@PathVariable long contactId) {
         try {
             contactService.deleteById(contactId);
