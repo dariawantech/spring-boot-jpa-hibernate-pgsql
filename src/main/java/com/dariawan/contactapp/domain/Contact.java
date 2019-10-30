@@ -9,7 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
@@ -34,30 +37,40 @@ public class Contact implements Serializable {
     @ApiModelProperty(notes = "Name of the contact.", 
             example = "Jessica Abigail", required = true, position = 1)
     @NotBlank
+    @Size(max = 100)
     private String name;
     
     @ApiModelProperty(notes = "Phone number of the contact.", 
             example = "62482211", required = false, position = 2)
+    @Pattern(regexp ="^\\+?[0-9. ()-]{7,25}$", message = "Phone number")
+    @Size(max = 25)
     private String phone;
     
     @ApiModelProperty(notes = "Email address of the contact.", 
             example = "jessica@ngilang.com", required = false, position = 3)
+    // @Pattern(regexp ="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", flags={CASE_INSENSITIVE})
+    @Email(message = "Email Address")
+    @Size(max = 100)
     private String email;
     
     @ApiModelProperty(notes = "Address line 1 of the contact.", 
             example = "888 Constantine Ave, #54", required = false, position = 4)
+    @Size(max = 50)
     private String address1;
     
     @ApiModelProperty(notes = "Address line 2 of the contact.", 
             example = "San Angeles", required = false, position = 5)
+    @Size(max = 50)
     private String address2;
     
     @ApiModelProperty(notes = "Address line 3 of the contact.", 
             example = "Florida", required = false, position = 6)
+    @Size(max = 50)
     private String address3;
     
     @ApiModelProperty(notes = "Postal code of the contact.", 
             example = "32106", required = false, position = 7)
+    @Size(max = 20)
     private String postalCode;
     
     @ApiModelProperty(notes = "Notes about the contact.", 
