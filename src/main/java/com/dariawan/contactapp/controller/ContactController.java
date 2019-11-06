@@ -70,8 +70,8 @@ public class ContactController {
             @ApiParam("Id of the contact to be obtained. Cannot be empty.")
             @PathVariable long contactId) {
         try {
-            Contact book = contactService.findById(contactId);
-            return ResponseEntity.ok(book);  // return 200, with json body
+            Contact contact = contactService.findById(contactId);
+            return ResponseEntity.ok(contact);  // return 200, with json body
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // return 404, with null body
         }
