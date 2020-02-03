@@ -93,7 +93,8 @@
                         <email>hello@dariawan.com</email>
                     </properties>
                     <excludes>                        
-                        <exclude>.mvn/**</exclude>
+                        <exclude>mvnw.cmd</exclude>
+						<exclude>.mvn/**</exclude>
                         <exclude>.hg/**</exclude>
                         <exclude>.git/**</exclude>
                         <exclude>.gitignore/**</exclude>
@@ -111,7 +112,7 @@
                         <exclude>**/js/**</exclude>
                         <exclude>**/css/**</exclude>
                         <exclude>**/src/main/resources/**</exclude>
-                        <exclude>**/src/main/sql/**</exclude>
+                        <exclude>**/src/sql/**</exclude>
                         <exclude>**/nb-configuration.xml</exclude>
                         <exclude>**/nbactions.xml</exclude>
                     </excludes>
